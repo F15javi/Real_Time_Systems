@@ -1,0 +1,10 @@
+C:/Users/Lenovo/Desktop/Master/STR/PrSTRDv3/Src/freertos.c:124:6:vApplicationGetIdleTaskMemory	1
+C:/Users/Lenovo/Desktop/Master/STR/PrSTRDv3/Src/freertos.c:138:6:MX_FREERTOS_Init	1
+C:/Users/Lenovo/Desktop/Master/STR/PrSTRDv3/Src/freertos.c:202:6:StartTarea1	1
+C:/Users/Lenovo/Desktop/Master/STR/PrSTRDv3/Src/freertos.c:235:6:StartTask02	1
+C:/Users/Lenovo/Desktop/Master/STR/PrSTRDv3/Src/freertos.c:261:6:StartTask03	1
+C:/Users/Lenovo/Desktop/Master/STR/PrSTRDv3/Src/freertos.c:279:6:StartTask04	1
+C:/Users/Lenovo/Desktop/Master/STR/PrSTRDv3/Src/freertos.c:297:6:StartTask05	5
+C:/Users/Lenovo/Desktop/Master/STR/PrSTRDv3/Src/freertos.c:334:6:Obtain_Coordinates_XYZ	4
+C:/Users/Lenovo/Desktop/Master/STR/PrSTRDv3/Src/freertos.c:356:8:Calculate_RotationX	1
+C:/Users/Lenovo/Desktop/Master/STR/PrSTRDv3/Src/freertos.c:362:8:Calculate_RotationY	1
