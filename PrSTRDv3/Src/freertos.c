@@ -71,6 +71,10 @@
 /* USER CODE BEGIN PD */
 	#define T_TAREA1 300
 	#define PR_TAREA1 1
+	#define T_TAREA2 200
+	#define PR_TAREA2 2
+	#define T_TAREA3 350
+	#define PR_TAREA3 3
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -92,6 +96,8 @@ double Calculate_RotationY();
 	double Z = 0; // eje Z
 
 	int ContTarea1 = 0;
+
+	int emergency = 0;
 /* USER CODE END Variables */
 osThreadId Tarea1Handle;
 osThreadId myTask02Handle;
@@ -147,6 +153,8 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE BEGIN RTOS_MUTEX */
   /* add mutexes, ... */
   /* USER CODE END RTOS_MUTEX */
+
+  xMutexEmergencies = xSemaphoreCreateMutex();
 
   /* Create the semaphores(s) */
   /* definition and creation of Semaforo_1 */
@@ -237,7 +245,7 @@ void StartTask02(void const * argument)
   /* USER CODE BEGIN StartTask02 */
   /* Infinite loop */
 	 TickType_t lastWakeTime;
-	   lastWakeTime = xTaskGetTickCount();
+	lastWakeTime = xTaskGetTickCount();
 	Inicializa_Acelerometro();
 
   for(;;)
@@ -245,7 +253,7 @@ void StartTask02(void const * argument)
 	 RX = Calculate_RotationX();
 	 RY = Calculate_RotationY();
     //osDelay(1);
-	vTaskDelayUntil(&lastWakeTime, pdMS_TO_TICKS(T_TAREA1));
+	vTaskDelayUntil(&lastWakeTime, pdMS_TO_TICKS(T_TAREA2));
 
   }
   /* USER CODE END StartTask02 */
@@ -262,9 +270,47 @@ void StartTask03(void const * argument)
 {
   /* USER CODE BEGIN StartTask03 */
   /* Infinite loop */
+  static double lastX=0, lastY=0, lastZ=0;
+  static int counter=0;
+  TickType_t lastWakeTime;
+  lastWakeTime = xTaskGetTickCount();
+
   for(;;)
   {
-    osDelay(1);
+	  //if(last)
+    if(!lastX&&!lastY&&!lastZ)
+    {
+    	lastX=X;
+		lastY=Y;
+		lastZ=Z;
+    }
+    else
+    {
+    	double Xdiff,Ydiff,Zdiff;
+    	Xdiff=fabs(X*100-lastX*100);
+		Ydiff=fabs(Y*100-lastY*100);
+		Zdiff=fabs(Z*100-lastZ*100);
+    	if(Xdiff>10||Ydiff>10||Zdiff>10)
+    	{
+    		counter++;
+    		if(counter>2)
+    		{
+    			xSemaphoreTake( xMutexEmergencies, portMAX_DELAY);
+    				emergency=1;
+    			xSemaphoreGive( xMutexEmergencies );
+    		}
+    	}
+    	else
+    	{
+    		counter=0;
+    	}
+
+    	lastX=X;
+		lastY=Y;
+		lastZ=Z;
+    }
+
+	vTaskDelayUntil(&lastWakeTime, pdMS_TO_TICKS(T_TAREA3));
   }
   /* USER CODE END StartTask03 */
 }
