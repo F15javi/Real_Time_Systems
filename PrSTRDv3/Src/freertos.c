@@ -53,12 +53,13 @@
 #include "task.h"
 #include "main.h"
 #include "cmsis_os.h"
+#include <math.h>
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
 #include "spi.h"
-
+#include "adc.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -87,8 +88,8 @@ double Calculate_RotationY();
 	double RY = 0; // Inclinacion eje Y
 	double RZ = 0; // Inclinacion eje Z
 
-	double X = 0; // eje Z
-	double Y = 0; // eje Z
+	double X = 0; // eje X
+	double Y = 0; // eje Y
 	double Z = 0; // eje Z
 
 	int ContTarea1 = 0;
@@ -203,25 +204,28 @@ void StartTarea1(void const * argument)
 {
   /* USER CODE BEGIN StartTarea1 */
 
-	 TickType_t lastWakeTime;
-   lastWakeTime = xTaskGetTickCount();
+	TickType_t lastWakeTime;
+	lastWakeTime = xTaskGetTickCount();
 
-	 HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);
-	 HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_RESET);
-	 HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_RESET);
-	 HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_RESET);
+	int Lectura_ADC1 = 0; //Valor leido
+	/* Inicializa canal 1 del ADC1 */
+	ADC_ChannelConfTypeDef sConfigN = {0}; // Variable local en la tarea
+	sConfigN.Channel = ADC_CHANNEL_1; // selecciona el canal 1
+	sConfigN.Rank = 1;
+	sConfigN.SamplingTime = ADC_SAMPLETIME_28CYCLES;
+	HAL_ADC_ConfigChannel(&hadc1, &sConfigN); // configura ADC1-Canal_1
 
-  /* Infinite loop */
-  for(;;)
-  {
-		ContTarea1 ++;
-
-
-    // osDelay(1);
-		vTaskDelayUntil(&lastWakeTime, pdMS_TO_TICKS(T_TAREA1));
-  }
-  /* USER CODE END 5 */
-
+	/* Infinite loop */
+	for(;;)
+	{
+	  // Activación de la lectura
+	  HAL_ADC_Start(&hadc1); // comienza la conversón AD
+	  if(HAL_ADC_PollForConversion(&hadc1, 5) == HAL_OK){
+		  Lectura_ADC1 = HAL_ADC_GetValue(&hadc1); // leemos el valor
+		  Altitud = Lectura_ADC1; // actualizamos una variable global }
+		  vTaskDelayUntil( &lastWakeTime, pdMS_TO_TICKS(T_TAREA1));
+	  }
+	}
   /* USER CODE END StartTarea1 */
 }
 
@@ -280,9 +284,12 @@ void StartTask04(void const * argument)
 {
   /* USER CODE BEGIN StartTask04 */
   /* Infinite loop */
+	TickType_t lastWakeTime;
+	lastWakeTime = xTaskGetTickCount();
   for(;;)
   {
-    osDelay(1);
+
+	vTaskDelayUntil(&lastWakeTime, pdMS_TO_TICKS(T_TAREA1));
   }
   /* USER CODE END StartTask04 */
 }
@@ -365,5 +372,11 @@ double Calculate_RotationY (){
 	rotY = - atan2(X, sqrt(Y*Y+Z*Z)) * 180.0/3.1416;
 	return rotY;
 }
-
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+	long yield = pdFALSE;
+	// Prevent unused argument(s) compilation warning
+	UNUSED(GPIO_Pin);
+	portYIELD_FROM_ISR(yield);
+}
 /* USER CODE END Application */
