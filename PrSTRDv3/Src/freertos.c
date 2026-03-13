@@ -100,6 +100,9 @@ TaskHandle_t Task04Handle = NULL;
 
 	int ContTarea1 = 0;
 
+	int target_altitud=0;
+	int current_altitud=0;
+
 	int start_signal=0;
 	int alt_ok=0;
 	int emergency = 0;
@@ -223,6 +226,7 @@ void StartTarea1(void const * argument)
 	TickType_t lastWakeTime;
 	lastWakeTime = xTaskGetTickCount();
 
+	int alt_ok_local=0;
 	int Lectura_ADC1 = 0; //Valor leido
 	/* Inicializa canal 1 del ADC1 */
 	ADC_ChannelConfTypeDef sConfigN = {0}; // Variable local en la tarea
@@ -238,7 +242,29 @@ void StartTarea1(void const * argument)
 	  HAL_ADC_Start(&hadc1); // comienza la conversón AD
 	  if(HAL_ADC_PollForConversion(&hadc1, 5) == HAL_OK){
 		  Lectura_ADC1 = HAL_ADC_GetValue(&hadc1); // leemos el valor
-		  Altitud = Lectura_ADC1; // actualizamos una variable global }
+
+		  xSemaphoreTake( xMutexTargetCurrentAltitude, portMAX_DELAY);
+
+		  current_altitud=Lectura_ADC1;
+		  if(current_altitud<target_altitud-2){
+			  alt_ok_local=1;
+		  }
+		  else{
+			  alt_ok_local=0;
+		  }
+
+		  xSemaphoreGive( xMutexTargetCurrentAltitude );
+
+		  xSemaphoreTake( xMutexAltitudeComm, portMAX_DELAY);
+		  if(alt_ok_local)
+		  {
+			  alt_ok=1;
+		  }else{
+			  alt_ok=0;
+		  }
+
+		  xSemaphoreGive( xMutexAltitudeComm );
+
 		  vTaskDelayUntil( &lastWakeTime, pdMS_TO_TICKS(T_TAREA1));
 	  }
 	}
@@ -348,6 +374,11 @@ void StartTask04(void const * argument)
 	  /* Wait for notification from ISR */
 	  ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
 
+	  xSemaphoreTake( xMutexTargetCurrentAltitude, portMAX_DELAY);
+
+	  target_altitud=current_altitud;
+
+	  xSemaphoreGive( xMutexTargetCurrentAltitude );
 
 	  vTaskDelayUntil(&lastWakeTime, pdMS_TO_TICKS(T_TAREA1));
   }
