@@ -75,6 +75,8 @@
 	#define PR_TAREA2 2
 	#define T_TAREA3 350
 	#define PR_TAREA3 3
+	#define T_TAREA5 150
+	#define PR_TAREA5 5
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -106,6 +108,7 @@ osThreadId myTask04Handle;
 osThreadId myTask05Handle;
 osMutexId mutex1Handle;
 osSemaphoreId Semaforo_1Handle;
+SemaphoreHandle_t xMutexEmergencies;
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -344,12 +347,29 @@ void StartTask05(void const * argument)
 {
   /* USER CODE BEGIN StartTask05 */
   /* Infinite loop */
+	TickType_t lastWakeTime;
+	lastWakeTime = xTaskGetTickCount();
+
 	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_RESET);
   for(;;)
   {
+
+
+		xSemaphoreTake( xMutexEmergencies, portMAX_DELAY);
+		if(emergency)
+		{
+			  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_SET);
+		}
+		else
+		{
+			  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_RESET);
+		}
+		xSemaphoreGive( xMutexEmergencies );
+
+		GPIO_PinState res=HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_8);
 
 	  if(RX > 10){
 		  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_SET);
@@ -369,7 +389,7 @@ void StartTask05(void const * argument)
 		  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);
 
 	  }
-    osDelay(1);
+		vTaskDelayUntil(&lastWakeTime, pdMS_TO_TICKS(T_TAREA5));
   }
   /* USER CODE END StartTask05 */
 }
