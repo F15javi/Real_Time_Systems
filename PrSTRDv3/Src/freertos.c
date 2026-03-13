@@ -361,11 +361,12 @@ void StartTask05(void const * argument)
 		xSemaphoreTake( xMutexEmergencies, portMAX_DELAY);
 		if(emergency)
 		{
-			  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_SET);
+
+			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_SET);
 		}
 		else
 		{
-			  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_RESET);
 		}
 		xSemaphoreGive( xMutexEmergencies );
 
