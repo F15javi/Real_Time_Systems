@@ -100,6 +100,8 @@ double Calculate_RotationY();
 
 	int ContTarea1 = 0;
 
+	int start_signal=0;
+	int alt_ok=0;
 	int emergency = 0;
 /* USER CODE END Variables */
 osThreadId Tarea1Handle;
@@ -109,6 +111,9 @@ osThreadId myTask04Handle;
 osThreadId myTask05Handle;
 osMutexId mutex1Handle;
 osSemaphoreId Semaforo_1Handle;
+SemaphoreHandle_t xMutexBalanceComm;
+SemaphoreHandle_t xMutexTargetCurrentAltitude;
+SemaphoreHandle_t xMutexAltitudeComm;
 SemaphoreHandle_t xMutexEmergencies;
 
 /* Private function prototypes -----------------------------------------------*/
@@ -156,14 +161,14 @@ void MX_FREERTOS_Init(void) {
 
   /* USER CODE BEGIN RTOS_MUTEX */
   /* add mutexes, ... */
+  	  xMutexBalanceComm = xSemaphoreCreateMutex();
+  	  xMutexTargetCurrentAltitude = xSemaphoreCreateMutex();
+  	  xMutexAltitudeComm = xSemaphoreCreateMutex();
+  	  xMutexEmergencies = xSemaphoreCreateMutex();
   /* USER CODE END RTOS_MUTEX */
-
-  xMutexEmergencies = xSemaphoreCreateMutex();
 
   /* Create the semaphores(s) */
   /* definition and creation of Semaforo_1 */
-  osSemaphoreDef(Semaforo_1);
-  Semaforo_1Handle = osSemaphoreCreate(osSemaphore(Semaforo_1), 1);
 
   /* USER CODE BEGIN RTOS_SEMAPHORES */
   /* add semaphores, ... */
@@ -376,6 +381,19 @@ void StartTask05(void const * argument)
 			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_RESET);
 		}
 		xSemaphoreGive( xMutexEmergencies );
+
+		xSemaphoreTake( xMutex, portMAX_DELAY);
+		if(emergency)
+		{
+
+			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_SET);
+		}
+		else
+		{
+			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_RESET);
+		}
+		xSemaphoreGive( xMutexEmergencies );
+
 
 		GPIO_PinState res=HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_8);
 
