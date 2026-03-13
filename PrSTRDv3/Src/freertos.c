@@ -262,8 +262,11 @@ void StartTask02(void const * argument)
 
   for(;;)
   {
+	 xSemaphoreTake( xMutexBalanceComm, portMAX_DELAY);
 	 RX = Calculate_RotationX();
 	 RY = Calculate_RotationY();
+	 xSemaphoreGive( xMutexBalanceComm );
+
     //osDelay(1);
 	vTaskDelayUntil(&lastWakeTime, pdMS_TO_TICKS(T_TAREA2));
 
@@ -382,21 +385,9 @@ void StartTask05(void const * argument)
 		}
 		xSemaphoreGive( xMutexEmergencies );
 
-		xSemaphoreTake( xMutex, portMAX_DELAY);
-		if(emergency)
-		{
-
-			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_SET);
-		}
-		else
-		{
-			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_RESET);
-		}
-		xSemaphoreGive( xMutexEmergencies );
-
-
 		GPIO_PinState res=HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_8);
 
+	  xSemaphoreTake( xMutexBalanceComm, portMAX_DELAY);
 	  if(RX > 10){
 		  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_SET);
 		  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_RESET);
@@ -404,8 +395,11 @@ void StartTask05(void const * argument)
 	  }else if(RX < -10){
 		  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
 		  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_RESET);
-
+	  }else{
+		  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_RESET);
+		  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_RESET);
 	  }
+
 	  if(RY > 10){
 		  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);
 		  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_RESET);
@@ -413,8 +407,23 @@ void StartTask05(void const * argument)
 	  }else if(RY < -10){
 		  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_SET);
 		  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);
-
 	  }
+	  else{
+		  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);
+		  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_RESET);
+	  }
+	  xSemaphoreGive( xMutexBalanceComm );
+
+	  xSemaphoreTake( xMutexAltitudeComm, portMAX_DELAY);
+	  if(alt_ok)
+	  {
+		  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);
+		  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_SET);
+		  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_SET);
+		  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
+	  }
+	  xSemaphoreGive( xMutexAltitudeComm );
+
 		vTaskDelayUntil(&lastWakeTime, pdMS_TO_TICKS(T_TAREA5));
   }
   /* USER CODE END StartTask05 */
