@@ -84,7 +84,7 @@
 /* USER CODE BEGIN PM */
 double Calculate_RotationX();
 double Calculate_RotationY();
-
+TaskHandle_t Task04Handle = NULL;
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -198,7 +198,7 @@ void MX_FREERTOS_Init(void) {
   /* definition and creation of myTask04 */
   osThreadDef(myTask04, StartTask04, osPriorityIdle, 0, 128);
   myTask04Handle = osThreadCreate(osThread(myTask04), NULL);
-
+  Task04Handle = myTask04Handle;
   /* definition and creation of myTask05 */
   osThreadDef(myTask05, StartTask05, osPriorityIdle, 0, 128);
   myTask05Handle = osThreadCreate(osThread(myTask05), NULL);
@@ -345,8 +345,11 @@ void StartTask04(void const * argument)
 	lastWakeTime = xTaskGetTickCount();
   for(;;)
   {
+	  /* Wait for notification from ISR */
+	  ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
 
-	vTaskDelayUntil(&lastWakeTime, pdMS_TO_TICKS(T_TAREA1));
+
+	  vTaskDelayUntil(&lastWakeTime, pdMS_TO_TICKS(T_TAREA1));
   }
   /* USER CODE END StartTask04 */
 }
@@ -467,10 +470,15 @@ double Calculate_RotationY (){
 	return rotY;
 }
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-{
-	long yield = pdFALSE;
-	// Prevent unused argument(s) compilation warning
-	UNUSED(GPIO_Pin);
-	portYIELD_FROM_ISR(yield);
-}
+	  {
+	      BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+
+	      if(GPIO_Pin == GPIO_PIN_0)
+	      {
+	          vTaskNotifyGiveFromISR(Task04Handle, &xHigherPriorityTaskWoken);
+	      }
+
+	      portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+	  }
+
 /* USER CODE END Application */
