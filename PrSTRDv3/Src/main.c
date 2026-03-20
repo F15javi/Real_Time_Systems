@@ -49,7 +49,6 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "cmsis_os.h"
 #include "adc.h"
 #include "can.h"
 #include "i2c.h"
@@ -60,25 +59,42 @@
 /* USER CODE BEGIN Includes */
 
 #include "FreeRTOS.h"
+#include "semphr.h"
 #include "task.h"
 #include <math.h>
+
+#include "T1Altitude.h"
+#include "T2Incliantion.h"
+#include "T3Vibration.h"
+#include "T4Activation.h"
+#include "T5Motor.h"
+
+
 
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-  #define TRUE 1
-  #define FALSE 0
+#define TRUE 1
+#define FALSE 0
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define PR_TAREA1 1
+#define PR_TAREA2 2
+#define PR_TAREA3 3
+#define PR_TAREA4 4
+#define PR_TAREA5 5
 
 
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
+TaskHandle_t Task04Handle = NULL;
+SemaphoreHandle_t xMutexBalanceComm = NULL;
+SemaphoreHandle_t xMutexEmergencies = NULL;
 
 /* USER CODE END PM */
 
@@ -137,7 +153,14 @@ int main(void)
   MX_ADC3_Init();
   MX_I2C2_Init();
   /* USER CODE BEGIN 2 */
+  xMutexBalanceComm = xSemaphoreCreateMutex();
+  xMutexEmergencies = xSemaphoreCreateMutex();
 
+  xTaskCreate(StartTarea1Altitude, "Tarea1", 128, NULL, PR_TAREA1, NULL);
+  xTaskCreate(StartTask02Incliantion, "Tarea2", 128, NULL, PR_TAREA2, NULL);
+  xTaskCreate(StartTask03Vibration, "Tarea3", 128, NULL, PR_TAREA3, NULL);
+  xTaskCreate(StartTask04Activation, "Tarea4", 128, NULL, 4, &Task04Handle);
+  xTaskCreate(StartTask05Motor, "Tarea5", 128, NULL, PR_TAREA5, NULL);
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in cmsis_os2.c) */
