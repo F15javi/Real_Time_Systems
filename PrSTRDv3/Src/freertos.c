@@ -53,7 +53,6 @@
 #include "task.h"
 #include "main.h"
 #include "cmsis_os.h"
-#include <math.h>
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -79,15 +78,17 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
-	/* USER CODE END Variables */
-
+/* USER CODE END Variables */
+osThreadId Tarea1Handle;
+osMutexId mutex1Handle;
+osSemaphoreId Semaforo_1Handle;
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
 
 /* USER CODE END FunctionPrototypes */
 
-
+void StartTarea1(void const * argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -118,7 +119,8 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE END Init */
   /* Create the mutex(es) */
   /* definition and creation of mutex1 */
-
+  osMutexDef(mutex1);
+  mutex1Handle = osMutexCreate(osMutex(mutex1));
 
   /* USER CODE BEGIN RTOS_MUTEX */
   /* add mutexes, ... */
@@ -127,6 +129,8 @@ void MX_FREERTOS_Init(void) {
 
   /* Create the semaphores(s) */
   /* definition and creation of Semaforo_1 */
+  osSemaphoreDef(Semaforo_1);
+  Semaforo_1Handle = osSemaphoreCreate(osSemaphore(Semaforo_1), 1);
 
   /* USER CODE BEGIN RTOS_SEMAPHORES */
   /* add semaphores, ... */
@@ -142,7 +146,8 @@ void MX_FREERTOS_Init(void) {
 
   /* Create the thread(s) */
   /* definition and creation of Tarea1 */
-
+  osThreadDef(Tarea1, StartTarea1, osPriorityIdle, 0, 128);
+  Tarea1Handle = osThreadCreate(osThread(Tarea1), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -150,6 +155,23 @@ void MX_FREERTOS_Init(void) {
 
 }
 
+/* USER CODE BEGIN Header_StartTarea1 */
+/**
+  * @brief  Function implementing the Tarea1 thread.
+  * @param  argument: Not used
+  * @retval None
+  */
+/* USER CODE END Header_StartTarea1 */
+void StartTarea1(void const * argument)
+{
+  /* USER CODE BEGIN StartTarea1 */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END StartTarea1 */
+}
 
 /* Private application code --------------------------------------------------*/
 /* USER CODE BEGIN Application */

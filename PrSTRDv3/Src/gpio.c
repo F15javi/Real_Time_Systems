@@ -20,7 +20,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "gpio.h"
-#include "FreeRTOS.h"
 
 /* USER CODE BEGIN 0 */
 

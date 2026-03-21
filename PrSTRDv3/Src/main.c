@@ -95,6 +95,8 @@
 TaskHandle_t Task04Handle = NULL;
 SemaphoreHandle_t xMutexBalanceComm = NULL;
 SemaphoreHandle_t xMutexEmergencies = NULL;
+SemaphoreHandle_t xMutexTargetCurrentAltitude = NULL;
+SemaphoreHandle_t xMutexAltitudeComm = NULL;
 
 /* USER CODE END PM */
 
@@ -109,7 +111,18 @@ SemaphoreHandle_t xMutexEmergencies = NULL;
 void SystemClock_Config(void);
 void MX_FREERTOS_Init(void);
 /* USER CODE BEGIN PFP */
+int emergency= 0;
 
+double RX = 0;
+double RY = 0;
+
+int alt_ok = 0;
+int target_altitud = 0;
+int current_altitud = 0;
+
+double X = 0;
+double Y = 0;
+double Z = 0;
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -155,6 +168,9 @@ int main(void)
   /* USER CODE BEGIN 2 */
   xMutexBalanceComm = xSemaphoreCreateMutex();
   xMutexEmergencies = xSemaphoreCreateMutex();
+  xMutexTargetCurrentAltitude = xSemaphoreCreateMutex();
+  xMutexAltitudeComm = xSemaphoreCreateMutex();
+
 
   xTaskCreate(StartTarea1Altitude, "Tarea1", 128, NULL, PR_TAREA1, NULL);
   xTaskCreate(StartTask02Incliantion, "Tarea2", 128, NULL, PR_TAREA2, NULL);
