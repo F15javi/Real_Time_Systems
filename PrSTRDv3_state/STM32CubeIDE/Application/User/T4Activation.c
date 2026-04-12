@@ -7,6 +7,7 @@
 
 extern int target_altitud;
 extern int current_altitud;
+extern int active;
 extern TaskHandle_t Task04Handle;
 
 extern SemaphoreHandle_t xMutexTargetCurrentAltitude;
@@ -33,7 +34,15 @@ void StartTask04Activation(void const * argument)
     	xSemaphoreTake(xBinaryInterruption, portMAX_DELAY);
 
         xSemaphoreTake(xMutexTargetCurrentAltitude, portMAX_DELAY);
-        target_altitud = current_altitud;
+        if (!active)
+        {
+        	active=1;
+        	target_altitud = current_altitud;
+        }
+        else
+        {
+        	active=0;
+        }
         xSemaphoreGive(xMutexTargetCurrentAltitude);
 
     }

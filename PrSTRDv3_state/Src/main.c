@@ -68,7 +68,7 @@
 #include "T3Vibration.h"
 #include "T4Activation.h"
 #include "T5Motor.h"
-
+#include "statechart.h"
 
 
 /* USER CODE END Includes */
@@ -97,7 +97,9 @@ SemaphoreHandle_t xMutexBalanceComm = NULL;
 SemaphoreHandle_t xMutexEmergencies = NULL;
 SemaphoreHandle_t xMutexTargetCurrentAltitude = NULL;
 SemaphoreHandle_t xMutexAltitudeComm = NULL;
+SemaphoreHandle_t xMutexState = NULL;
 SemaphoreHandle_t xBinaryInterruption = NULL;
+
 
 /* USER CODE END PM */
 
@@ -117,6 +119,7 @@ int emergency= 0;
 double RX = 0;
 double RY = 0;
 
+int active = 0;
 int alt_ok = 0;
 int target_altitud = 0;
 int current_altitud = 0;
@@ -171,6 +174,7 @@ int main(void)
   xMutexEmergencies = xSemaphoreCreateMutex();
   xMutexTargetCurrentAltitude = xSemaphoreCreateMutex();
   xMutexAltitudeComm = xSemaphoreCreateMutex();
+  xMutexState = xSemaphoreCreateMutex();
   xBinaryInterruption = xSemaphoreCreateBinary();
 
 
