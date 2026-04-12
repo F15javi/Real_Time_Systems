@@ -60,7 +60,7 @@ void Front()
 	switch(thisState) {
 		case Standby: thisState = Standby; break;
 		case Active: thisState = Correcting; M1On(); break;
-		case Correcting: thisState = Correcting; M1On(); M4Off(); break;
+		case Correcting: thisState = Correcting; M1On(); M2Off(); break;
 		case Rising: thisState = Rising; break;
 		case Risk: thisState = Risk; break;
 	}
@@ -72,8 +72,8 @@ void Back()
 	xSemaphoreTake(xMutexState, portMAX_DELAY);
 	switch(thisState) {
 		case Standby: thisState = Standby; break;
-		case Active: thisState = Correcting; M4On(); break;
-		case Correcting: thisState = Correcting; M4On(); M1Off(); break;
+		case Active: thisState = Correcting; M2On(); break;
+		case Correcting: thisState = Correcting; M2On(); M1Off(); break;
 		case Rising: thisState = Rising; break;
 		case Risk: thisState = Risk; break;
 	}
@@ -86,7 +86,7 @@ void Left()
 	switch(thisState) {
 		case Standby: thisState = Standby; break;
 		case Active: thisState = Correcting; M3On(); break;
-		case Correcting: thisState = Correcting; M3On(); M2Off(); break;
+		case Correcting: thisState = Correcting; M3On(); M4Off(); break;
 		case Rising: thisState = Rising; break;
 		case Risk: thisState = Risk; break;
 	}
@@ -98,8 +98,8 @@ void Right()
 	xSemaphoreTake(xMutexState, portMAX_DELAY);
 	switch(thisState) {
 		case Standby: thisState = Standby; break;
-		case Active: thisState = Correcting; M2On(); break;
-		case Correcting: thisState = Correcting; M2On(); M3Off(); break;
+		case Active: thisState = Correcting; M4On(); break;
+		case Correcting: thisState = Correcting; M4On(); M3Off(); break;
 		case Rising: thisState = Rising; break;
 		case Risk: thisState = Risk; break;
 	}
@@ -153,7 +153,7 @@ void Vibrating()
 		case Active: thisState = Risk; M1Off(), M2Off(), M3Off(), M4Off(); L2On(); break;
 		case Correcting: thisState = Risk; M1Off(), M2Off(), M3Off(), M4Off();L2On();break;
 		case Rising: thisState = Risk; M1Off(), M2Off(), M3Off(), M4Off();L2On();break;
-		case Risk: thisState = Risk; M1Off(), M2Off(), M3Off(), M4Off();L2On();break;
+		case Risk: thisState = Risk;break;
 	}
 	xSemaphoreGive(xMutexState);
 }
