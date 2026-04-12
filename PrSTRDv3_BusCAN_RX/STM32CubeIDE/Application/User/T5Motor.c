@@ -14,7 +14,7 @@ extern CAN_HandleTypeDef hcan1;
 extern SemaphoreHandle_t xMutexEmergencies;
 extern SemaphoreHandle_t xMutexBalanceComm;
 extern SemaphoreHandle_t xMutexAltitudeComm;
-extern uint8_t ByteReceived1, ByteReceived2[4], ByteReceived3, ByteReceived4;
+extern uint8_t ByteReceived1, ByteReceived2, ByteReceived3, ByteReceived4;
 #define T_TAREA5 150
 
 void StartTask05Motor(void const * argument)
@@ -57,17 +57,16 @@ void StartTask05Motor(void const * argument)
 
 		xSemaphoreTake(xMutexBalanceComm, portMAX_DELAY);
 
-		int16_t Rx_In = (int16_t)((ByteReceived2[0] << 8) | ByteReceived2[1]);
-		int16_t Ry_In = (int16_t)((ByteReceived2[2] << 8) | ByteReceived2[3]);
 
-		float RX = (float)Rx_In / 10.0f;
-		float RY = (float)Ry_In / 10.0f;
 
-		if(RX > 10){
+		ByteReceived2;
+
+
+		if(ByteReceived2 = 0x2){
 		  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_SET);
 		  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_RESET);
 
-		}else if(RX < -10){
+		}else if(ByteReceived2 = 0x1){
 		  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
 		  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_RESET);
 		}else{
@@ -75,11 +74,11 @@ void StartTask05Motor(void const * argument)
 		  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_RESET);
 		}
 
-		if(RY > 10){
+		if(ByteReceived2 = 0x8){
 		  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);
 		  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_RESET);
 
-		}else if(RY < -10){
+		}else if(ByteReceived2 = 0x4){
 		  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_SET);
 		  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);
 		}
