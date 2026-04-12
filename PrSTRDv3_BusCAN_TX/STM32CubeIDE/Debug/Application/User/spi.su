@@ -1,0 +1,5 @@
+C:/Users/Lenovo/Desktop/Master/STR/PrSTRDv3_BusCAN_TX/Src/spi.c:30:6:MX_SPI1_Init	8	static
+C:/Users/Lenovo/Desktop/Master/STR/PrSTRDv3_BusCAN_TX/Src/spi.c:62:6:HAL_SPI_MspInit	48	static
+C:/Users/Lenovo/Desktop/Master/STR/PrSTRDv3_BusCAN_TX/Src/spi.c:93:6:HAL_SPI_MspDeInit	16	static
+C:/Users/Lenovo/Desktop/Master/STR/PrSTRDv3_BusCAN_TX/Src/spi.c:124:9:SPI_Read	16	static
+C:/Users/Lenovo/Desktop/Master/STR/PrSTRDv3_BusCAN_TX/Src/spi.c:140:6:Inicializa_Acelerometro	8	static

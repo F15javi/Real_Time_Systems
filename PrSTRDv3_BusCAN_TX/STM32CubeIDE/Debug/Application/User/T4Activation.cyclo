@@ -1,0 +1,2 @@
+../Application/User/T4Activation.c:23:6:HAL_GPIO_EXTI_Callback	2
+../Application/User/T4Activation.c:34:6:StartTask04Activation	2

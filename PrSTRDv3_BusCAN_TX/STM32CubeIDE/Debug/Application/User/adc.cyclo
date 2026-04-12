@@ -1,0 +1,5 @@
+C:/Users/Lenovo/Desktop/Master/STR/PrSTRDv3_BusCAN_TX/Src/adc.c:32:6:MX_ADC1_Init	3
+C:/Users/Lenovo/Desktop/Master/STR/PrSTRDv3_BusCAN_TX/Src/adc.c:79:6:MX_ADC2_Init	3
+C:/Users/Lenovo/Desktop/Master/STR/PrSTRDv3_BusCAN_TX/Src/adc.c:126:6:MX_ADC3_Init	3
+C:/Users/Lenovo/Desktop/Master/STR/PrSTRDv3_BusCAN_TX/Src/adc.c:173:6:HAL_ADC_MspInit	4
+C:/Users/Lenovo/Desktop/Master/STR/PrSTRDv3_BusCAN_TX/Src/adc.c:250:6:HAL_ADC_MspDeInit	4

@@ -1,0 +1,4 @@
+../Application/User/T2Incliantion.c:25:6:Obtain_Coordinates_XYZ	4
+../Application/User/T2Incliantion.c:48:8:Calculate_RotationX	1
+../Application/User/T2Incliantion.c:55:8:Calculate_RotationY	1
+../Application/User/T2Incliantion.c:62:6:StartTask02Incliantion	1
