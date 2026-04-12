@@ -32,7 +32,7 @@ void Start()
 {
 	xSemaphoreTake(xMutexState, portMAX_DELAY);
 	switch(thisState) {
-		case Standby: thisState = Active; break;
+		case Standby: thisState = Active; L1On() ; break;
 		case Active: thisState = Active; break;
 		case Correcting: thisState = Correcting; break;
 		case Rising: thisState = Rising; break;
@@ -46,9 +46,9 @@ void Stop()
 	xSemaphoreTake(xMutexState, portMAX_DELAY);
 	switch(thisState) {
 		case Standby: thisState = Standby; break;
-		case Active: thisState = Standby; break;
-		case Correcting: thisState = Standby; break;
-		case Rising: thisState = Standby; break;
+		case Active: thisState = Standby; L1Off(); break;
+		case Correcting: thisState = Standby; L1Off() ; break;
+		case Rising: thisState = Standby; L1Off(); break;
 		case Risk: thisState = Risk; break;
 	}
 	xSemaphoreGive(xMutexState);
@@ -59,8 +59,8 @@ void Front()
 	xSemaphoreTake(xMutexState, portMAX_DELAY);
 	switch(thisState) {
 		case Standby: thisState = Standby; break;
-		case Active: thisState = Correcting; break;
-		case Correcting: thisState = Correcting;/*aqui hay accion*/ break;
+		case Active: thisState = Correcting; M1On(); break;
+		case Correcting: thisState = Correcting; M1On(); M4Off(); break;
 		case Rising: thisState = Rising; break;
 		case Risk: thisState = Risk; break;
 	}
@@ -72,8 +72,8 @@ void Back()
 	xSemaphoreTake(xMutexState, portMAX_DELAY);
 	switch(thisState) {
 		case Standby: thisState = Standby; break;
-		case Active: thisState = Correcting; break;
-		case Correcting: thisState = Correcting; break;
+		case Active: thisState = Correcting; M4On(); break;
+		case Correcting: thisState = Correcting; M4On(); M1Off(); break;
 		case Rising: thisState = Rising; break;
 		case Risk: thisState = Risk; break;
 	}
@@ -85,8 +85,8 @@ void Left()
 	xSemaphoreTake(xMutexState, portMAX_DELAY);
 	switch(thisState) {
 		case Standby: thisState = Standby; break;
-		case Active: thisState = Correcting; break;
-		case Correcting: thisState = Correcting; break;
+		case Active: thisState = Correcting; M3On(); break;
+		case Correcting: thisState = Correcting; M3On(); M2Off(); break;
 		case Rising: thisState = Rising; break;
 		case Risk: thisState = Risk; break;
 	}
@@ -98,8 +98,8 @@ void Right()
 	xSemaphoreTake(xMutexState, portMAX_DELAY);
 	switch(thisState) {
 		case Standby: thisState = Standby; break;
-		case Active: thisState = Correcting; break;
-		case Correcting: thisState = Correcting; break;
+		case Active: thisState = Correcting; M2On(); break;
+		case Correcting: thisState = Correcting; M2On(); M3Off(); break;
 		case Rising: thisState = Rising; break;
 		case Risk: thisState = Risk; break;
 	}
@@ -112,7 +112,7 @@ void InclinationOK()
 	switch(thisState) {
 		case Standby: thisState = Standby; break;
 		case Active: thisState = Active; break;
-		case Correcting: thisState = Active; break;
+		case Correcting: thisState = Active; M1Off(), M2Off(), M3Off(), M4Off(); break;
 		case Rising: thisState = Rising; break;
 		case Risk: thisState = Risk; break;
 	}
@@ -124,7 +124,7 @@ void Rise()
 	xSemaphoreTake(xMutexState, portMAX_DELAY);
 	switch(thisState) {
 		case Standby: thisState = Standby; break;
-		case Active: thisState = Rising; break;
+		case Active: thisState = Rising; M1On(), M2On(), M3On(), M4On(); break;
 		case Correcting: thisState = Correcting; break;
 		case Rising: thisState = Rising; break;
 		case Risk: thisState = Risk; break;
@@ -139,7 +139,7 @@ void AltitudeOK()
 		case Standby: thisState = Standby; break;
 		case Active: thisState = Active; break;
 		case Correcting: thisState = Correcting; break;
-		case Rising: thisState = Active; break;
+		case Rising: thisState = Active; M1Off(), M2Off(), M3Off(), M4Off(); break;
 		case Risk: thisState = Risk; break;
 	}
 	xSemaphoreGive(xMutexState);
@@ -150,10 +150,10 @@ void Vibrating()
 	xSemaphoreTake(xMutexState, portMAX_DELAY);
 	switch(thisState) {
 		case Standby: thisState = Standby; break;
-		case Active: thisState = Risk; break;
-		case Correcting: thisState = Risk; break;
-		case Rising: thisState = Risk; break;
-		case Risk: thisState = Risk; break;
+		case Active: thisState = Risk; M1Off(), M2Off(), M3Off(), M4Off(); L2On(); break;
+		case Correcting: thisState = Risk; M1Off(), M2Off(), M3Off(), M4Off();L2On();break;
+		case Rising: thisState = Risk; M1Off(), M2Off(), M3Off(), M4Off();L2On();break;
+		case Risk: thisState = Risk; M1Off(), M2Off(), M3Off(), M4Off();L2On();break;
 	}
 	xSemaphoreGive(xMutexState);
 }
@@ -166,7 +166,7 @@ void VibrationsOK()
 		case Active: thisState = Active; break;
 		case Correcting: thisState = Correcting; break;
 		case Rising: thisState = Rising; break;
-		case Risk: thisState = Active; break;
+		case Risk: thisState = Active; L2Off(); break;
 	}
 	xSemaphoreGive(xMutexState);
 }
