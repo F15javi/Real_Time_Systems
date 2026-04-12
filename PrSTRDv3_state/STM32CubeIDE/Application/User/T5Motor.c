@@ -131,7 +131,7 @@ void M1On()
 
 void M2On()
 {
-	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
 }
 
 void M3On()
@@ -141,7 +141,7 @@ void M3On()
 
 void M4On()
 {
-	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_SET);
 }
 
 void M1Off()
@@ -151,7 +151,7 @@ void M1Off()
 
 void M2Off()
 {
-	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_RESET);
 }
 
 void M3Off()
@@ -161,5 +161,5 @@ void M3Off()
 
 void M4Off()
 {
-	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_RESET);
 }
