@@ -1,3 +1,7 @@
+/*
+ *      Authors: Héctor Borreguero Monleón y Francisco Javier Díaz Ventura
+ */
+
 #include "T2Incliantion.h"
 #include "FreeRTOS.h"
 #include "main.h"

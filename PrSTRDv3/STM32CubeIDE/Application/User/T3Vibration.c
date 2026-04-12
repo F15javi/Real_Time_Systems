@@ -1,3 +1,7 @@
+/*
+ *      Authors: Héctor Borreguero Monleón y Francisco Javier Díaz Ventura
+ */
+
 #include "T3Vibration.h"
 #include "FreeRTOS.h"
 #include "math.h"

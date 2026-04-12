@@ -1,5 +1,7 @@
 /* USER CODE BEGIN Header */
 /**
+ *      Authors: Héctor Borreguero Monleón y Francisco Javier Díaz Ventura
+ *
   ******************************************************************************
   * File Name          : freertos.c
   * Description        : Code for freertos applications

@@ -1,3 +1,7 @@
+/*
+ *      Authors: Héctor Borreguero Monleón y Francisco Javier Díaz Ventura
+ */
+
 #ifndef TAREA1_H
 #define TAREA1_H
 

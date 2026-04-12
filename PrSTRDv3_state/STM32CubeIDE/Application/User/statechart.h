@@ -1,8 +1,5 @@
 /*
- * statechart.c
- *
- *  Created on: 12 Apr 2026
- *      Author: hector
+ *      Authors: Héctor Borreguero Monleón y Francisco Javier Díaz Ventura
  */
 
 #include "FreeRTOS.h"

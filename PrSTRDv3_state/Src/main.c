@@ -1,5 +1,8 @@
 /* USER CODE BEGIN Header */
 /**
+*
+*      Authors: Héctor Borreguero Monleón y Francisco Javier Díaz Ventura
+*
   ******************************************************************************
   * @file           : main.c
   * @brief          : Main program body

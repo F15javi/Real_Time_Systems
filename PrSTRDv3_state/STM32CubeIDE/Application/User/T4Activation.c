@@ -1,3 +1,7 @@
+/*
+ *      Authors: Héctor Borreguero Monleón y Francisco Javier Díaz Ventura
+ */
+
 #include "T4Activation.h"
 #include "FreeRTOS.h"
 #include "semphr.h"

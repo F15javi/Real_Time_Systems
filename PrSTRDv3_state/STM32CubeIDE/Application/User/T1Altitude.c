@@ -1,3 +1,7 @@
+/*
+ *      Authors: Héctor Borreguero Monleón y Francisco Javier Díaz Ventura
+ */
+
 #include "T1Altitude.h"
 #include "adc.h"
 #include "FreeRTOS.h"

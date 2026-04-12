@@ -1,3 +1,7 @@
+/*
+ *      Authors: Héctor Borreguero Monleón y Francisco Javier Díaz Ventura
+ */
+
 #include "T5Motor.h"
 #include "FreeRTOS.h"
 #include "task.h"
